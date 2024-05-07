@@ -1,0 +1,7 @@
+if hexo-config('preloader.enable')
+  if hexo-config('preloader.load_style') == 'hyperspace'
+    @import './hyperspace'
+  else if hexo-config('preloader.load_style') == 'wizard'
+    @import './wizard'
+  else
+    @import './default'

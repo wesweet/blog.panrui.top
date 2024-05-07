@@ -1,0 +1,12 @@
+//- if theme.preloader.source === 1
+//-   include ./fullpage-loading.pug
+//- else
+//-   include ./pace.pug
+if theme.preloader.enable
+  case theme.preloader.load_style    
+    when 'wizard'
+      include ./wizard.pug
+    when 'hyperspace'
+      include ./hyperspace.pug
+    default
+      include ./fullpage-loading.pug
