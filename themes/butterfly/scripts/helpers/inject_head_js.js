@@ -6,118 +6,75 @@
 'use strict'
 
 hexo.extend.helper.register('inject_head_js', function () {
-  const { darkmode, aside, pjax } = this.theme
-  const start = darkmode.start || 6
-  const end = darkmode.end || 18
+  const { darkmode, aside } = this.theme
+
   const { theme_color } = hexo.theme.config
-  const themeColorLight = (theme_color && theme_color.enable && theme_color.meta_theme_color_light) || '#ffffff'
-  const themeColorDark = (theme_color && theme_color.enable && theme_color.meta_theme_color_dark) || '#0d0d0d'
+  const themeColorLight = theme_color && theme_color.enable && theme_color.meta_theme_color_light || '#ffffff'
+  const themeColorDark = theme_color && theme_color.enable && theme_color.meta_theme_color_dark || '#0d0d0d'
 
-  const createCustonJs = () => {
-    return `
-      const saveToLocal = {
-        set: (key, value, ttl) => {
-          if (ttl === 0) return
-          const now = Date.now()
-          const expiry = now + ttl * 86400000
-          const item = {
-            value,
-            expiry
-          }
-          localStorage.setItem(key, JSON.stringify(item))
-        },
-      
-        get: key => {
-          const itemStr = localStorage.getItem(key)
-      
-          if (!itemStr) {
-            return undefined
-          }
-          const item = JSON.parse(itemStr)
-          const now = Date.now()
-      
-          if (now > item.expiry) {
-            localStorage.removeItem(key)
-            return undefined
-          }
-          return item.value
+  const localStore = `
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
         }
-      }
-      
-      window.btf = {
-        saveToLocal: saveToLocal,
-        getScript: (url, attr = {}) => new Promise((resolve, reject) => {
-          const script = document.createElement('script')
-          script.src = url
-          script.async = true
-          script.onerror = reject
-          script.onload = script.onreadystatechange = function() {
-            const loadState = this.readyState
-            if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-            script.onload = script.onreadystatechange = null
-            resolve()
-          }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
 
-          Object.keys(attr).forEach(key => {
-            script.setAttribute(key, attr[key])
-          })
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
 
-          document.head.appendChild(script)
-        }),
-
-        getCSS: (url, id = false) => new Promise((resolve, reject) => {
-          const link = document.createElement('link')
-          link.rel = 'stylesheet'
-          link.href = url
-          if (id) link.id = id
-          link.onerror = reject
-          link.onload = link.onreadystatechange = function() {
-            const loadState = this.readyState
-            if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-            link.onload = link.onreadystatechange = null
-            resolve()
-          }
-          document.head.appendChild(link)
-        }),
-
-        addGlobalFn: (key, fn, name = false, parent = window) => {
-          const pjaxEnable = ${pjax.enable}
-          if (!pjaxEnable && key.startsWith('pjax')) return
-
-          const globalFn = parent.globalFn || {}
-          const keyObj = globalFn[key] || {}
-    
-          if (name && keyObj[name]) return
-    
-          name = name || Object.keys(keyObj).length
-          keyObj[name] = fn
-          globalFn[key] = keyObj
-          parent.globalFn = globalFn
+        if (!itemStr) {
+          return undefined
         }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
       }
-    `
-  }
+    }
+  `
 
-  const createDarkmodeJs = () => {
-    if (!darkmode.enable) return ''
+  // https://stackoverflow.com/questions/16839698/jquery-getscript-alternative-in-native-javascript
+  const getScript = `
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  `
 
-    let darkmodeJs = `
-      const activateDarkMode = () => {
+  let darkmodeJs = ''
+  if (darkmode.enable) {
+    darkmodeJs = `
+      win.activateDarkMode = function () {
         document.documentElement.setAttribute('data-theme', 'dark')
         if (document.querySelector('meta[name="theme-color"]') !== null) {
           document.querySelector('meta[name="theme-color"]').setAttribute('content', '${themeColorDark}')
         }
       }
-      const activateLightMode = () => {
+      win.activateLightMode = function () {
         document.documentElement.setAttribute('data-theme', 'light')
         if (document.querySelector('meta[name="theme-color"]') !== null) {
           document.querySelector('meta[name="theme-color"]').setAttribute('content', '${themeColorLight}')
         }
       }
-
-      btf.activateDarkMode = activateDarkMode
-      btf.activateLightMode = activateLightMode
-      
       const t = saveToLocal.get('theme')
     `
 
@@ -136,10 +93,10 @@ hexo.extend.helper.register('inject_head_js', function () {
             else if (isNotSpecified || hasNoSupport) {
               const now = new Date()
               const hour = now.getHours()
-              const isNight = hour <= ${start} || hour >= ${end}
+              const isNight = hour <= 6 || hour >= 18
               isNight ? activateDarkMode() : activateLightMode()
             }
-            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
               if (saveToLocal.get('theme') === undefined) {
                 e.matches ? activateDarkMode() : activateLightMode()
               }
@@ -151,25 +108,22 @@ hexo.extend.helper.register('inject_head_js', function () {
       darkmodeJs += `
           const now = new Date()
           const hour = now.getHours()
-          const isNight = hour <= ${start} || hour >= ${end}
+          const isNight = hour <= 6 || hour >= 18
           if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
           else if (t === 'light') activateLightMode()
           else activateDarkMode()
         `
     } else {
       darkmodeJs += `
-        if (t === 'dark') activateDarkMode()
-        else if (t === 'light') activateLightMode()
-      `
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        `
     }
-
-    return darkmodeJs
   }
 
-  const createAsideStatus = () => {
-    if (!aside.enable || !aside.button) return ''
-
-    return `
+  let asideStatus = ''
+  if (aside.enable && aside.button) {
+    asideStatus = `
       const asideStatus = saveToLocal.get('aside-status')
       if (asideStatus !== undefined) {
         if (asideStatus === 'hide') {
@@ -181,16 +135,14 @@ hexo.extend.helper.register('inject_head_js', function () {
     `
   }
 
-  const createDetectApple = () => {
-    return `
-      const detectApple = () => {
-        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
-          document.documentElement.classList.add('apple')
-        }
+  const detectApple = `
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
       }
-      detectApple()
+    }
+    detectApple()
     `
-  }
 
-  return `<script>(()=>{${createCustonJs() + createDarkmodeJs() + createAsideStatus() + createDetectApple()}})()</script>`
+  return `<script>(win=>{${localStore + getScript + darkmodeJs + asideStatus + detectApple}})(window)</script>`
 })

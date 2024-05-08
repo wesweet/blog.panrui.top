@@ -21,12 +21,9 @@
     localSearch = JSON.stringify({
       path: theme.local_search.CDN ? theme.local_search.CDN : config.root + config.search.path,
       preload: theme.local_search.preload,
-      top_n_per_article: theme.local_search.top_n_per_article,
-      unescape: theme.local_search.unescape,
       languages: {
         // search languages
         hits_empty: _p("search.local_search.hits_empty"),
-        hits_stats: _p("search.local_search.hits_stats"),
       }
     })
   }
@@ -78,21 +75,17 @@
   }
 
   let highlight = 'undefined';
-  let syntaxHighlighter = config.syntax_highlighter;
-  let highlightEnable = syntaxHighlighter ? ['highlight.js', 'prismjs'].includes(syntaxHighlighter) : (config.highlight.enable || config.prismjs.enable);
-  if (highlightEnable) {
+  if ((config.highlight && config.highlight.enable) || (config.prismjs && config.prismjs.enable)) {
     highlight = JSON.stringify({
-      plugin: syntaxHighlighter ? syntaxHighlighter : config.highlight.enable ? 'highlight.js' : 'prismjs',
+      plugin: config.highlight.enable ? 'highlighjs' : 'prismjs',
       highlightCopy: theme.highlight_copy,
       highlightLang: theme.highlight_lang,
-      highlightHeightLimit: theme.highlight_height_limit,
-      highlightFullpage: theme.highlight_fullpage,
-      highlightMacStyle: theme.highlight_theme_macStyle
+      highlightHeightLimit: theme.highlight_height_limit
     })
   }
 
 script.
-  const GLOBAL_CONFIG = {
+  const GLOBAL_CONFIG = { 
     root: '!{config.root}',
     algolia: !{algolia},
     localSearch: !{localSearch},
@@ -109,7 +102,7 @@ script.
       post: !{theme.post_meta.post.date_format === 'relative'}
     },
     runtime: '!{theme.runtimeshow.enable ? _p("aside.card_webinfo.runtime.unit") : ""}',
-    dateSuffix: {
+    date_suffix: {
       just: '!{_p("date_suffix.just")}',
       min: '!{_p("date_suffix.min")}',
       hour: '!{_p("date_suffix.hour")}',
@@ -119,16 +112,13 @@ script.
     copyright: !{copyright},
     lightbox: '!{ theme.medium_zoom ? "mediumZoom" : (theme.fancybox ? "fancybox" : "null" )}',
     Snackbar: !{Snackbar},
-    infinitegrid: {
-      js: '!{url_for(theme.asset.egjs_infinitegrid)}',
-      buttonText: '!{_p("load_more")}'
+    source: {
+      justifiedGallery: {
+        js: '!{url_for(theme.asset.flickr_justified_gallery_js)}',
+        css: '!{url_for(theme.asset.flickr_justified_gallery_css)}'
+      }
     },
     isPhotoFigcaption: !{theme.photofigcaption},
     islazyload: !{theme.lazyload.enable},
-    isAnchor: !{theme.anchor.auto_update || false},
-    percent: {
-      toc: !{theme.toc.scroll_percent},
-      rightside: !{theme.rightside_scroll_percent},
-    },
-    autoDarkmode: !{theme.darkmode.enable && theme.darkmode.autoChangeMode === 1}
+    isAnchor: !{theme.anchor}
   }

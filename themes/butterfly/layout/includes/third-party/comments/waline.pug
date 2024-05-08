@@ -2,11 +2,16 @@
 - const { lazyload, count, use } = theme.comments
 
 script.
-  (() => {
-    let initFn = window.walineFn || null
+  function loadWaline () {
+    function insertCSS () {
+      const link = document.createElement("link")
+      link.rel = "stylesheet"
+      link.href = "!{url_for(theme.asset.waline_css)}"
+      document.head.appendChild(link)
+    }
 
-    const initWaline = (Fn) => {
-      const waline = Fn(Object.assign({
+    function initWaline () {
+      const waline = Waline.init(Object.assign({
         el: '#waline-wrap',
         serverURL: '!{serverURL}',
         pageview: !{lazyload ? false : pageview},
@@ -14,32 +19,22 @@ script.
         path: window.location.pathname,
         comment: !{lazyload ? false : count},
       }, !{JSON.stringify(option)}))
-
-      const destroyWaline = () => {
-        waline.destroy()
-      }
-
-      btf.addGlobalFn('pjax', destroyWaline, 'destroyWaline')
     }
 
-    const loadWaline = () => {
-      if (initFn) initWaline(initFn)
-      else {
-        btf.getCSS('!{url_for(theme.asset.waline_css)}')
-          .then(() => import('!{url_for(theme.asset.waline_js)}'))
-          .then(({ init }) => {
-            initFn = init || Waline.init
-            initWaline(initFn)
-            window.walineFn = initFn
-          })
-      }
+    if (typeof Waline === 'function') initWaline()
+    else {
+      insertCSS()
+      getScript('!{url_for(theme.asset.waline_js)}').then(initWaline)
     }
+  }
 
-    if ('!{use[0]}' === 'Waline' || !!{lazyload}) {
-      if (!{lazyload}) btf.loadComment(document.getElementById('waline-wrap'),loadWaline)
-      else setTimeout(loadWaline, 0)
-    } else {
-      window.loadOtherComment = loadWaline
+  if ('!{use[0]}' === 'Waline' || !!{lazyload}) {
+    if (!{lazyload}) btf.loadComment(document.getElementById('waline-wrap'),loadWaline)
+    else setTimeout(loadWaline, 0)
+  } else {
+    function loadOtherComment () {
+      loadWaline()
     }
-  })()
+  }
+  
 

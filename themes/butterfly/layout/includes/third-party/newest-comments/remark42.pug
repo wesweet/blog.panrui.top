@@ -38,7 +38,7 @@ script.
       }
 
       let $dom = document.querySelector('#card-newest-comments .aside-list')
-      $dom && ($dom.innerHTML= result)
+      $dom.innerHTML= result
       window.lazyLoadInstance && window.lazyLoadInstance.update()
       window.pjax && window.pjax.refresh($dom)
     }
@@ -56,17 +56,17 @@ script.
               'date': e.time,
             }
           })
-          btf.saveToLocal.set('remark42-newest-comments', JSON.stringify(remark42), !{theme.newest_comments.storage}/(60*24))
+          saveToLocal.set('remark42-newest-comments', JSON.stringify(remark42), !{theme.newest_comments.storage}/(60*24))
           generateHtml(remark42)
         }).catch(e => {
           const $dom = document.querySelector('#card-newest-comments .aside-list')
-          $dom.textContent= "!{_p('aside.card_newest_comments.error')}"
+          $dom.innerHTML= "!{_p('aside.card_newest_comments.error')}"
         })
     }
 
     const newestCommentInit = () => {
       if (document.querySelector('#card-newest-comments .aside-list')) {
-        const data = btf.saveToLocal.get('remark42-newest-comments')
+        const data = saveToLocal.get('remark42-newest-comments')
         if (data) {
           generateHtml(JSON.parse(data))
         } else {
@@ -76,5 +76,5 @@ script.
     }
 
     newestCommentInit()
-    btf.addGlobalFn('pjaxComplete', newestCommentInit, 'remark42_newestComment')
+    document.addEventListener('pjax:complete', newestCommentInit)
   })

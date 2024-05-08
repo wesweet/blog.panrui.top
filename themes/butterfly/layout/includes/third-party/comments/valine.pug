@@ -1,38 +1,33 @@
-- const { use, lazyload } = theme.comments
-- const { appId, appKey, avatar, serverURLs, visitor, option } = theme.valine
-
 - let emojiMaps = '""'
 if site.data.valine
   - emojiMaps = JSON.stringify(site.data.valine)
 
 script.
-  (() => {
-    const initValine = () => {
+  function loadValine () {
+    function initValine () {
       const valine = new Valine(Object.assign({
         el: '#vcomment',
-        appId: '#{appId}',
-        appKey: '#{appKey}',
-        avatar: '#{avatar}',
-        serverURLs: '#{serverURLs}',
+        appId: '#{theme.valine.appId}',
+        appKey: '#{theme.valine.appKey}',
+        avatar: '#{theme.valine.avatar}',
+        serverURLs: '#{theme.valine.serverURLs}',
         emojiMaps: !{emojiMaps},
         path: window.location.pathname,
-        visitor: #{visitor}
-      }, !{JSON.stringify(option)}))
+        visitor: #{theme.valine.visitor}
+      }, !{JSON.stringify(theme.valine.option)}))
     }
 
-    const loadValine = async () => {
-      if (typeof Valine === 'function') initValine()
-      else {
-        await btf.getScript('!{url_for(theme.asset.valine)}')
-        initValine()
-      }
-    }
+    if (typeof Valine === 'function') initValine() 
+    else getScript('!{url_for(theme.asset.valine)}').then(initValine)
+  }
 
-    if ('!{use[0]}' === 'Valine' || !!{lazyload}) {
-      if (!{lazyload}) btf.loadComment(document.getElementById('vcomment'),loadValine)
-      else setTimeout(loadValine, 0)
-    } else {
-      window.loadOtherComment = loadValine
+  if ('!{theme.comments.use[0]}' === 'Valine' || !!{theme.comments.lazyload}) {
+    if (!{theme.comments.lazyload}) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    function loadOtherComment () {
+      loadValine()
     }
-  })()
+  }
+  
 
