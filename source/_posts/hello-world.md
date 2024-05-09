@@ -2,6 +2,7 @@
 title: Hello World
 abbrlink: 4a17b156
 swiper_index: 1
+cover: http://hbimg.huaban.com/a314db2c356a6bfd1fb01bf1ead652ba34e3cec325884a-x3k49S
 ---
 Welcome to [Hexo](https://hexo.io/)! This is your very first post. Check [documentation](https://hexo.io/docs/) for more info. If you get any problems when using Hexo, you can find the answer in [troubleshooting](https://hexo.io/docs/troubleshooting.html) or you can ask me on [GitHub](https://github.com/hexojs/hexo/issues).
 
