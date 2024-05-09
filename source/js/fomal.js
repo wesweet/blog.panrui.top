@@ -3176,7 +3176,7 @@ if (localStorage.getItem("blogbg") != undefined) {
   document.getElementById("defineBg").innerText = `:root{
     --default-bg: url(http://hbimg.huaban.com/9c87f71a5837557aea3fa23dd4e0ad656567044fce3dbd-sA89YY);
     --darkmode-bg:url(https://lskypro.acozycotage.net/Fomalhaut/img/yuanshen1.webp);
-    --mobileday-bg: url(https://lskypro.acozycotage.net/Fomalhaut/img/snow.webp);
+    --mobileday-bg: url(http://hbimg.huaban.com/a959573b6e87c9e0c8ec2ea62672eda48d533f9e42f735-lqC9kA);
     --mobilenight-bg: url(https://lskypro.acozycotage.net/Fomalhaut/img/mb8.webp);
   }`;
 }

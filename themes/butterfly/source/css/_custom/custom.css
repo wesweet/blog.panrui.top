@@ -1199,23 +1199,23 @@ button#go-up:hover #percent {
 
 /* 个人信息卡片背景图 */
 [data-theme="light"] #aside-content > .card-widget.card-info {
-  background-image: url(https://tuchuang.voooe.cn/images/2023/02/28/springBg.png);
+  /* background-image: url(http://hbimg.huaban.com/fc5f144d49be5e773c3fb3bb14816f016814a1101c509-IhJ5ep); */
   background-repeat: no-repeat;
   background-attachment: inherit;
   background-size: 100%;
 }
 [data-theme="dark"] #aside-content > .card-widget.card-info {
-  background-image: url(https://tuchuang.voooe.cn/images/2023/02/28/aurora.webp);
+  /* background-image: url(https://tuchuang.voooe.cn/images/2023/02/28/aurora.webp); */
   background-repeat: no-repeat;
   background-attachment: inherit;
   background-size: 100%;
 }
 /* 头像呼吸灯 */
 [data-theme="light"] .avatar-img {
-  animation: huxi_light 4s ease-in-out infinite;
+  /* animation: huxi_light 4s ease-in-out infinite; */
 }
 [data-theme="dark"] .avatar-img {
-  animation: huxi_dark 4s ease-in-out infinite;
+  /* animation: huxi_dark 4s ease-in-out infinite; */
 }
 @keyframes huxi_light {
   0% {
