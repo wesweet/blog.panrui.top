@@ -3174,7 +3174,7 @@ if (localStorage.getItem("blogbg") != undefined) {
   setBg(localStorage.getItem("blogbg"));
 } else {
   document.getElementById("defineBg").innerText = `:root{
-    --default-bg: url(https://lskypro.acozycotage.net/Fomalhaut/img/dm14.webp);
+    --default-bg: url(http://hbimg.huaban.com/9c87f71a5837557aea3fa23dd4e0ad656567044fce3dbd-sA89YY);
     --darkmode-bg:url(https://lskypro.acozycotage.net/Fomalhaut/img/yuanshen1.webp);
     --mobileday-bg: url(https://lskypro.acozycotage.net/Fomalhaut/img/snow.webp);
     --mobilenight-bg: url(https://lskypro.acozycotage.net/Fomalhaut/img/mb8.webp);
@@ -3406,7 +3406,7 @@ function createWinbox() {
 <h3>1. 二次元</h3>
 {% folding cyan, 查看二次元背景 %}
 <div class="bgbox">
-<a href="javascript:;" rel="noopener external nofollow" style="background-image:url(https://lskypro.acozycotage.net/Fomalhaut/img/home_bg.webp)" class="imgbox" onclick="changeBg('url(https://lskypro.acozycotage.net/Fomalhaut/img/home_bg.webp)')"></a>
+<a href="javascript:;" rel="noopener external nofollow" style="background-image:url(http://hbimg.huaban.com/97b51a1b71979941fb5917214ad38c3814f03d4f38f59-75fOf7)" class="imgbox" onclick="changeBg('url(http://hbimg.huaban.com/97b51a1b71979941fb5917214ad38c3814f03d4f38f59-75fOf7)')"></a>
 
 </div>
 {% endfolding %}
