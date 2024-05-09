@@ -3174,9 +3174,9 @@ if (localStorage.getItem("blogbg") != undefined) {
   setBg(localStorage.getItem("blogbg"));
 } else {
   document.getElementById("defineBg").innerText = `:root{
-    --default-bg: url(http://hbimg.huaban.com/9c87f71a5837557aea3fa23dd4e0ad656567044fce3dbd-sA89YY);
+    --default-bg: url(https://static.panrui.top/images/blog/pc_bg.jpg);
     --darkmode-bg:url(https://lskypro.acozycotage.net/Fomalhaut/img/yuanshen1.webp);
-    --mobileday-bg: url(http://hbimg.huaban.com/a959573b6e87c9e0c8ec2ea62672eda48d533f9e42f735-lqC9kA);
+    --mobileday-bg: url(https://static.panrui.top/images/blog/mobile_bg.jpg);
     --mobilenight-bg: url(https://lskypro.acozycotage.net/Fomalhaut/img/mb8.webp);
   }`;
 }
