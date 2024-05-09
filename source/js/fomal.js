@@ -99,7 +99,7 @@ function getDistance(e1, n1, e2, n2) {
 
 function showWelcome() {
 
-  let dist = getDistance(113.34499552, 23.15537143, ipLoacation.result.location.lng, ipLoacation.result.location.lat); //这里换成自己的经纬度
+  let dist = getDistance(120.08355364585879, 30.303390763422605, ipLoacation.result.location.lng, ipLoacation.result.location.lat); //这里换成自己的经纬度
   let pos = ipLoacation.result.ad_info.nation;
   let ip;
   let posdesc;
@@ -2789,7 +2789,7 @@ function createtime() {
   var dis = Math.trunc(23400000000 + ((now - start) / 1000) * 17); // 距离=秒数*速度 记住转换毫秒
   var unit = (dis / 149600000).toFixed(6);  // 天文单位
   // 网站诞生时间
-  var grt = new Date("08/09/2022 00:00:00");
+  var grt = new Date("05/01/2024 00:00:00");
   var days = (now - grt) / 1e3 / 60 / 60 / 24,
     dnum = Math.floor(days),
     hours = (now - grt) / 1e3 / 60 / 60 - 24 * dnum,
