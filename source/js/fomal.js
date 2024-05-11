@@ -3816,10 +3816,8 @@ if (localStorage.getItem("blogbg") != undefined) {
 } else {
   document.getElementById("defineBg").innerText = `:root{
     --default-bg: url(https://static.panrui.top/images/blog/pc_bg.jpg);
-    // --darkmode-bg:url(https://lskypro.acozycotage.net/Fomalhaut/img/yuanshen1.webp);
     --darkmode-bg:url(https://static.panrui.top/images/blog/pc_night_bg.jpg);
     --mobileday-bg: url(https://static.panrui.top/images/blog/mobile_bg.jpg);
-    // --mobilenight-bg: url(https://lskypro.acozycotage.net/Fomalhaut/img/mb8.webp);
     --mobilenight-bg: url(https://static.panrui.top/images/blog/mobile_night_bg.jpg);
   }`;
 }
