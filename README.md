@@ -261,10 +261,10 @@
     enable: true
     coinAudio: https://npm.elemecdn.com/akilar-candyassets@1.0.36/audio/aowu.m4a
     QR_code:
-      - img: https://tuchuang.voooe.cn/images/2023/01/04/2.webp
+      - img: ''
         link:
         text: 微信
-      - img: https://tuchuang.voooe.cn/images/2023/01/04/20f8e49805975b8f8.webp
+      - img: ''
         link:
         text: 支付宝
   ```
